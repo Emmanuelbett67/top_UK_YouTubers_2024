@@ -168,3 +168,166 @@ The cleaned data should meet the following criteria and constraints:
 - Only relevant columns should be retained.
 - All data types should be appropriate for the contents of each column.
 - No column should contain null values, indicating complete data for all records.
+
+Below is a table outlining the constraints on our cleaned dataset:
+
+| Property | Description |
+| --- | --- |
+| Number of Rows | 100 |
+| Number of Columns | 4 |
+
+And here is a tabular representation of the expected schema for the clean data:
+
+| Column Name | Data Type | Nullable |
+| --- | --- | --- |
+| channel_name | VARCHAR | NO |
+| total_subscribers | INTEGER | NO |
+| total_views | INTEGER | NO |
+| total_videos | INTEGER | NO |
+
+
+
+- What steps are needed to clean and shape the data into the desired format?
+
+1. Remove unnecessary columns by only selecting the ones you need
+2. Extract Youtube channel names from the first column
+3. Rename columns using aliases
+
+
+
+### Transform the data 
+
+
+
+```sql
+/*
+# 1. Select the required columns
+# 2. Extract the channel name from the 'NOMBRE' column
+*/
+
+-- 1.
+SELECT
+    SUBSTRING(NOMBRE, 1, CHARINDEX('@', NOMBRE) -1) AS channel_name,  -- 2.
+    total_subscribers,
+    total_views,
+    total_videos
+
+FROM
+    top_uk_youtubers_2024
+```
+
+
+### Create the SQL view 
+
+```sql
+/*
+# 1. Create a view to store the transformed data
+# 2. Cast the extracted channel name as VARCHAR(100)
+# 3. Select the required columns from the top_uk_youtubers_2024 SQL table 
+*/
+
+-- 1.
+CREATE VIEW view_uk_youtubers_2024 AS
+
+-- 2.
+SELECT
+    CAST(SUBSTRING(NOMBRE, 1, CHARINDEX('@', NOMBRE) -1) AS VARCHAR(100)) AS channel_name, -- 2. 
+    total_subscribers,
+    total_views,
+    total_videos
+
+-- 3.
+FROM
+    top_uk_youtubers_2024
+
+```
+
+
+# Testing 
+
+- What data quality and validation checks are you going to create?
+
+Here are the data quality tests conducted:
+
+## Row count check
+```sql
+/*
+# Count the total number of records (or rows) are in the SQL view
+*/
+
+SELECT
+    COUNT(*) AS no_of_rows
+FROM
+    view_uk_youtubers_2024;
+
+```
+
+![Row count check](assets/images/row_count_check.png)
+
+
+
+## Column count check
+### SQL query 
+```sql
+/*
+# Count the total number of columns (or fields) are in the SQL view
+*/
+
+
+SELECT
+    COUNT(*) AS column_count
+FROM
+    INFORMATION_SCHEMA.COLUMNS
+WHERE
+    TABLE_NAME = 'view_uk_youtubers_2024'
+```
+### Output 
+![Column count check](assets/images/column_count_check.png)
+
+
+
+## Data type check
+### SQL query 
+```sql
+/*
+# Check the data types of each column from the view by checking the INFORMATION SCHEMA view
+*/
+
+-- 1.
+SELECT
+    COLUMN_NAME,
+    DATA_TYPE
+FROM
+    INFORMATION_SCHEMA.COLUMNS
+WHERE
+    TABLE_NAME = 'view_uk_youtubers_2024';
+```
+### Output
+![Data type check](assets/images/data_type_check.png)
+
+
+## Duplicate count check
+### SQL query 
+```sql
+/*
+# 1. Check for duplicate rows in the view
+# 2. Group by the channel name
+# 3. Filter for groups with more than one row
+*/
+
+-- 1.
+SELECT
+    channel_name,
+    COUNT(*) AS duplicate_count
+FROM
+    view_uk_youtubers_2024
+
+-- 2.
+GROUP BY
+    channel_name
+
+-- 3.
+HAVING
+    COUNT(*) > 1;
+```
+### Output
