@@ -331,3 +331,183 @@ HAVING
     COUNT(*) > 1;
 ```
 ### Output
+![Duplicate count check](assets/images/4_duplicate_records_check.png)
+
+# Visualization 
+
+
+## Results
+
+- What does the dashboard look like?
+
+![GIF of Power BI Dashboard](assets/images/top_uk_youtubers_2024.gif)
+
+This shows the Top UK Youtubers in 2024 so far. 
+
+
+## DAX Measures
+
+### 1. Total Subscribers (M)
+```sql
+Total Subscribers (M) = 
+VAR million = 1000000
+VAR sumOfSubscribers = SUM(view_uk_youtubers_2024[total_subscribers])
+VAR totalSubscribers = DIVIDE(sumOfSubscribers,million)
+
+RETURN totalSubscribers
+
+```
+
+### 2. Total Views (B)
+```sql
+Total Views (B) = 
+VAR billion = 1000000000
+VAR sumOfTotalViews = SUM(view_uk_youtubers_2024[total_views])
+VAR totalViews = ROUND(sumOfTotalViews / billion, 2)
+
+RETURN totalViews
+
+```
+
+### 3. Total Videos
+```sql
+Total Videos = 
+VAR totalVideos = SUM(view_uk_youtubers_2024[total_videos])
+
+RETURN totalVideos
+
+```
+
+### 4. Average Views Per Video (M)
+```sql
+Average Views per Video (M) = 
+VAR sumOfTotalViews = SUM(view_uk_youtubers_2024[total_views])
+VAR sumOfTotalVideos = SUM(view_uk_youtubers_2024[total_videos])
+VAR  avgViewsPerVideo = DIVIDE(sumOfTotalViews,sumOfTotalVideos, BLANK())
+VAR finalAvgViewsPerVideo = DIVIDE(avgViewsPerVideo, 1000000, BLANK())
+
+RETURN finalAvgViewsPerVideo 
+
+```
+
+
+### 5. Subscriber Engagement Rate
+```sql
+Subscriber Engagement Rate = 
+VAR sumOfTotalSubscribers = SUM(view_uk_youtubers_2024[total_subscribers])
+VAR sumOfTotalVideos = SUM(view_uk_youtubers_2024[total_videos])
+VAR subscriberEngRate = DIVIDE(sumOfTotalSubscribers, sumOfTotalVideos, BLANK())
+
+RETURN subscriberEngRate 
+
+```
+
+
+### 6. Views per subscriber
+```sql
+Views Per Subscriber = 
+VAR sumOfTotalViews = SUM(view_uk_youtubers_2024[total_views])
+VAR sumOfTotalSubscribers = SUM(view_uk_youtubers_2024[total_subscribers])
+VAR viewsPerSubscriber = DIVIDE(sumOfTotalViews, sumOfTotalSubscribers, BLANK())
+
+RETURN viewsPerSubscriber 
+
+```
+
+
+
+
+# Analysis 
+
+## Findings
+
+- What did we find?
+
+For this analysis, we're going to focus on the questions below to get the information we need for our marketing client - 
+
+Here are the key questions we need to answer for our marketing client: 
+1. Who are the top 10 YouTubers with the most subscribers?
+2. Which 3 channels have uploaded the most videos?
+3. Which 3 channels have the most views?
+4. Which 3 channels have the highest average views per video?
+5. Which 3 channels have the highest views per subscriber ratio?
+6. Which 3 channels have the highest subscriber engagement rate per video uploaded?
+
+
+### 1. Who are the top 10 YouTubers with the most subscribers?
+
+| Rank | Channel Name         | Subscribers (M) |
+|------|----------------------|-----------------|
+| 1    | NoCopyrightSounds    | 33.60           |
+| 2    | DanTDM               | 28.60           |
+| 3    | Dan Rhodes           | 26.50           |
+| 4    | Miss Katy            | 24.50           |
+| 5    | Mister Max           | 24.40           |
+| 6    | KSI                  | 24.10           |
+| 7    | Jelly                | 23.50           |
+| 8    | Dua Lipa             | 23.30           |
+| 9    | Sidemen              | 21.00           |
+| 10   | Ali-A                | 18.90           |
+
+
+### 2. Which 3 channels have uploaded the most videos?
+
+| Rank | Channel Name    | Videos Uploaded |
+|------|-----------------|-----------------|
+| 1    | GRM Daily       | 14,696          |
+| 2    | Manchester City | 8,248           |
+| 3    | Yogscast        | 6,435           |
+
+
+
+### 3. Which 3 channels have the most views?
+
+
+| Rank | Channel Name | Total Views (B) |
+|------|--------------|-----------------|
+| 1    | DanTDM       | 19.78           |
+| 2    | Dan Rhodes   | 18.56           |
+| 3    | Mister Max   | 15.97           |
+
+
+### 4. Which 3 channels have the highest average views per video?
+
+| Channel Name | Average Views per Video (M) |
+|--------------|-----------------|
+| Mark Ronson  | 32.27           |
+| Jessie J     | 5.97            |
+| Dua Lipa     | 5.76            |
+
+
+### 5. Which 3 channels have the highest views per subscriber ratio?
+
+| Rank | Channel Name       | Views per Subscriber        |
+|------|-----------------   |---------------------------- |
+| 1    | GRM Daily          | 1185.79                     |
+| 2    | Nickelodeon        | 1061.04                     |
+| 3    | Disney Junior UK   | 1031.97                     |
+
+
+
+### 6. Which 3 channels have the highest subscriber engagement rate per video uploaded?
+
+| Rank | Channel Name    | Subscriber Engagement Rate  |
+|------|-----------------|---------------------------- |
+| 1    | Mark Ronson     | 343,000                     |
+| 2    | Jessie J        | 110,416.67                  |
+| 3    | Dua Lipa        | 104,954.95                  |
+
+
+
+
+### Notes
+
+For this analysis, we'll prioritize analysing the metrics that are important in generating the expected ROI for our marketing client, which are the YouTube channels wuth the most 
+
+- subscribers
+- total views
+- videos uploaded
+
+
+
+## Validation 
