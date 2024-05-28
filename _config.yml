@@ -1,0 +1,6 @@
+title: Emmanuel
+logo: assets/images/profile_pic.png
+show_downloads: True
+remote_theme: yaoyao-liu/minimal-light
+plugins:
+- jekyll-remote-theme
