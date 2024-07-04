@@ -33,26 +33,26 @@
 
 # Objective 
 
-- What is the key pain point? 
+- What is the key main point? 
 
-The Head of Marketing wants to find out who the top YouTubers are in 2024 to decide on which YouTubers would be best to run marketing campaigns throughout the rest of the year.
+The Head of Marketing wants to find out who the top YouTubers are in 2024 to decide which YouTubers would be best to run marketing campaigns throughout the rest of the year.
 
 
 - What is the ideal solution? 
 
-To create a dashboard that provides insights into the top UK YouTubers in 2024 that includes their 
+To create a dashboard that provides insights into the top UK YouTubers in 2024 including their 
 - subscriber count
 - total views
 - total videos, and
 - engagement metrics
 
-This will help the marketing team make informed decisions about which YouTubers to collaborate with for their marketing campaigns.
+This will help the marketing team decide which YouTubers to collaborate with for their marketing campaigns.
 
 ## User story 
 
-As the Head of Marketing, I want to use a dashboard that analyses YouTube channel data in the UK . 
+As the Head of Marketing, I want to use a dashboard that analyses YouTube channel data in the UK. 
 
-This dashboard should allow me to identify the top performing channels based on metrics like subscriber base and average views. 
+This dashboard should allow me to identify the top-performing channels based on metrics like subscriber base and average views. 
 
 With this information, I can make more informed decisions about which Youtubers are right to collaborate with, and therefore maximize how effective each marketing campaign is.
 
@@ -61,7 +61,7 @@ With this information, I can make more informed decisions about which Youtubers 
 
 - What data is needed to achieve our objective?
 
-We need data on the top UK YouTubers in 2024 that includes their 
+We need data on the top UK YouTubers in 2024 that including their 
 - channel names
 - total subscribers
 - total views
@@ -76,7 +76,7 @@ The data is sourced from Kaggle (an Excel extract), [see here to find it.](https
 # Stages
 
 - Design
-- Developement
+- Development
 - Testing
 - Analysis
 
@@ -102,7 +102,7 @@ For now, these are some of the questions we need to answer, this may change as w
 
 - What should it look like? 
 
-Some of the data visuals that may be appropriate in answering our questions include:
+Some of the data visuals that may be appropriate for answering our questions include:
 
 1. Table
 2. Treemap
@@ -144,7 +144,7 @@ Some of the data visuals that may be appropriate in answering our questions incl
 
 ## Data exploration notes
 
-This is the stage where you have a scan of what's in the data, errors, inconcsistencies, bugs, weird and corrupted characters etc  
+This is the stage where you have a scan of what's in the data, errors, inconsistencies, bugs, weird and corrupted characters, etc  
 
 
 - What are your initial observations with this dataset? What's caught your attention so far? 
@@ -159,7 +159,7 @@ This is the stage where you have a scan of what's in the data, errors, inconcsis
 
 
 ## Data cleaning 
-- What do we expect the clean data to look like? (What should it contain? What contraints should we apply to it?)
+- What do we expect the clean data to look like? (What should it contain? What constraints should we apply to it?)
 
 The aim is to refine our dataset to ensure it is structured and ready for analysis. 
 
@@ -176,7 +176,7 @@ Below is a table outlining the constraints on our cleaned dataset:
 | Number of Rows | 100 |
 | Number of Columns | 4 |
 
-And here is a tabular representation of the expected schema for the clean data:
+Here is a tabular representation of the expected schema for the clean data:
 
 | Column Name | Data Type | Nullable |
 | --- | --- | --- |
@@ -190,7 +190,7 @@ And here is a tabular representation of the expected schema for the clean data:
 - What steps are needed to clean and shape the data into the desired format?
 
 1. Remove unnecessary columns by only selecting the ones you need
-2. Extract Youtube channel names from the first column
+2. Extract YouTube channel names from the first column
 3. Rename columns using aliases
 
 
