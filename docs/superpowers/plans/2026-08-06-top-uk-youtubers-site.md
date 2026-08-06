@@ -3161,3 +3161,57 @@ removal (Tasks 1, 15) · every test the spec names (Tasks 3–5, 16).
 **Known deferrals:** reader-adjustable ROI inputs are out of scope per the spec. The Pages
 source switch in Task 15 Step 4 is a manual GitHub settings change and cannot be automated
 from the repo.
+
+---
+
+## Amendments made during execution
+
+Every item below was found by review or by testing the built page, not anticipated
+in the original plan. The code blocks above for Tasks 2, 3 and 5 have been updated
+in place; the rest are recorded here only.
+
+**Task 2 — blank cells coerced to zero.** `Number("")` is `0`, not `NaN`, and `0`
+passes `Number.isFinite`. A blank subscriber or view cell would have shipped as a
+legitimate-looking zero. The script now checks the raw string before coercion, and
+distinguishes "missing" from "not a number".
+
+**Task 2 — line endings.** `Papa.unparse` emits `\r\n` between records while the
+script appended `\n`, so regeneration was not byte-stable across machines; the
+committed file was pure LF only because `core.autocrlf` laundered it. Now pinned
+with `newline: "\n"`.
+
+**Task 2 — zero subscribers.** `total_videos` had a zero guard; `total_subscribers`
+did not, and `viewsPerSubscriber` divides by it. Added.
+
+**Task 3 — the loader repeated the Task 2 mistake.** Row count was validated but
+field values were not. The guard has to run on PapaParse's raw output, *before*
+`Number(...)`, because coercion is what destroys the evidence. Two tests pin it.
+
+**Task 5 — the formula test could not fail.** "Applies the formula, not a memorised
+table" compared the returned fields only against each other, so an implementation
+that fabricated `avgViews` — or ignored the dataset entirely — would still pass.
+Now anchored to a value the test computes itself from `channels`. Verified by
+sabotage: hardcoding `avgViews` fails four tests.
+
+**Task 5 — missing caveat.** `avgViews` is a lifetime mean, not a forecast of a new
+sponsored video. That is the model's central limitation and it was documented only
+on the page, not in the module. Added to the `roiRanking` doc comment.
+
+**Task 6 — negative currency rendered as `£−266,169`.** The sign belongs outside the
+symbol. ROI net profit goes negative for nine of ten candidates at a £2M campaign
+cost, so this would have shipped. Fixed in `gbp` and `compactGbp`, with a
+regression test using the U+2212 character `d3.format` actually emits.
+
+**Task 6 — token drift warning.** The note that `chart.ts`'s hex values shadow
+`globals.css` existed in this plan's prose but never reached the code. Added to the
+file, where a maintainer will see it.
+
+**Task 14/16 — horizontal page scroll at 375px and 768px.** Grid and flex children
+default to `min-width: auto`, so `Panel`, the How-it-was-built cards and the Tools
+list rows refused to shrink below their content and dragged the whole page
+sideways. The inner `overflow-x-auto` wrappers never got the chance to engage.
+Fixed with `min-w-0`. This is the one defect that no amount of unit testing would
+have caught — it only appears in a real browser at a real width.
+
+**Task 14 — mixed magnitude units.** The summary band showed `1055.5M` subscribers
+beside `471.21B` views. Switched to `billions`, giving `1.06B`.
