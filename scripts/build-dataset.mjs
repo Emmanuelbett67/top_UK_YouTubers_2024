@@ -44,8 +44,12 @@ for (const row of rows) {
       throw new Error(`${row.channel_name}: ${column} is not a number (got "${raw}")`);
     }
   }
-  // Three of the six metrics divide by this.
+  // Three of the six metrics divide by total_videos, one divides by
+  // total_subscribers. A zero in either would surface as Infinity on a chart.
   if (row.total_videos === 0) throw new Error(`${row.channel_name}: zero videos`);
+  if (row.total_subscribers === 0) {
+    throw new Error(`${row.channel_name}: zero subscribers`);
+  }
 }
 
 writeFileSync(
