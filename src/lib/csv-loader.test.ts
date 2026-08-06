@@ -40,4 +40,42 @@ describe("parseChannels", () => {
     const truncated = csv.split("\n").slice(0, 5).join("\n");
     expect(() => parseChannels(truncated)).toThrow(/100 rows/);
   });
+
+  it("rejects a numeric cell that contains non-numeric text", () => {
+    const lines = csv.split("\n");
+    // Row 1 is the first data row (NoCopyrightSounds). Corrupt total_subscribers
+    // in place so the row count stays at 100 and only the field guard can fire.
+    const fields = lines[1].split(",");
+    fields[1] = "N/A";
+    lines[1] = fields.join(",");
+    const malformed = lines.join("\n");
+
+    const dataRowCount = malformed
+      .split("\n")
+      .slice(1)
+      .filter((line) => line.trim().length > 0).length;
+    expect(dataRowCount).toBe(100);
+
+    expect(() => parseChannels(malformed)).toThrow(
+      /NoCopyrightSounds/
+    );
+    expect(() => parseChannels(malformed)).toThrow(/total_subscribers/);
+  });
+
+  it("rejects a blank numeric cell instead of silently coercing it to 0", () => {
+    const lines = csv.split("\n");
+    const fields = lines[1].split(",");
+    fields[3] = ""; // blank total_videos
+    lines[1] = fields.join(",");
+    const malformed = lines.join("\n");
+
+    const dataRowCount = malformed
+      .split("\n")
+      .slice(1)
+      .filter((line) => line.trim().length > 0).length;
+    expect(dataRowCount).toBe(100);
+
+    expect(() => parseChannels(malformed)).toThrow(/total_videos/);
+    expect(() => parseChannels(malformed)).toThrow(/NoCopyrightSounds/);
+  });
 });
