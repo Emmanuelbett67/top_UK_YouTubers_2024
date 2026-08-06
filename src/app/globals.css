@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --paper: 40 20% 98.5%;
+    --background: 40 20% 98.5%;
+    --foreground: 220 15% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 9%;
+    --popover: 220 15% 9%;
+    --popover-foreground: 40 20% 98.5%;
+
+    --ink: 220 15% 9%;
+    --ink-muted: 220 6% 42%;
+    --ink-faint: 220 6% 62%;
+
+    --muted: 40 12% 95%;
+    --muted-foreground: 220 6% 42%;
+
+    --border: 38 12% 89%;
+    --border-strong: 38 10% 80%;
+
+    --positive: 162 78% 24%;
+    --positive-soft: 162 40% 94%;
+    --negative: 12 62% 42%;
+    --negative-soft: 12 55% 95%;
+
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  .tnum,
+  table,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+@layer components {
+  .card-flat {
+    @apply bg-card border border-border rounded;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .stat-figure {
+    @apply text-[26px] leading-none font-medium tracking-[-0.02em] tnum;
+  }
+
+  .rule {
+    @apply border-t border-border;
+  }
+}
+
+@layer utilities {
+  .text-positive {
+    color: hsl(var(--positive));
+  }
+  .text-negative {
+    color: hsl(var(--negative));
+  }
+}
+
+/* ---- D3 chart chrome -------------------------------------------------- */
+
+.chart text {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  fill: hsl(var(--ink-muted));
+  font-size: 11px;
+}
+
+.chart .axis text {
+  font-variant-numeric: tabular-nums;
+  fill: hsl(var(--ink-faint));
+  font-size: 10.5px;
+  letter-spacing: 0.01em;
+}
+
+.chart .axis .domain {
+  display: none;
+}
+
+.chart .axis line {
+  stroke: hsl(var(--border));
+}
+
+.chart .axis--baseline .domain {
+  display: initial;
+  stroke: hsl(var(--border-strong));
+}
+
+.chart .grid line {
+  stroke: hsl(var(--border));
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.chart .grid .domain {
+  display: none;
+}
+
+.chart .value-label {
+  fill: hsl(var(--ink));
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart .baseline-rule {
+  stroke: hsl(var(--ink-faint));
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.chart .baseline-label {
+  fill: hsl(var(--ink-faint));
+  font-size: 10px;
+  letter-spacing: 0.01em;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 50;
+  pointer-events: none;
+  min-width: 170px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  box-shadow: 0 8px 24px -6px rgb(0 0 0 / 0.35);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.chart-tooltip[data-show="true"] {
+  opacity: 1;
+}
+
+.chart-tooltip .tt-title {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.14);
+}
+
+.chart-tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.chart-tooltip .tt-key {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.chart-tooltip .tt-val {
+  font-variant-numeric: tabular-nums;
+}
