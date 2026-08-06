@@ -3,7 +3,7 @@
 import React from "react";
 import { useChannels } from "@/hooks/useChannels";
 import { totals } from "@/lib/metrics";
-import { billions, count, millions } from "@/lib/format";
+import { billions, count } from "@/lib/format";
 import Nav from "@/components/Nav";
 import Section from "@/components/Section";
 import StatBand from "@/components/charts/StatBand";
@@ -46,8 +46,11 @@ export default function Home() {
                 stats={[
                   { label: "Channels", value: count(totals(channels).channels) },
                   {
+                    // Billions, not millions: the combined figure passed 1bn, and
+                    // "1055.5M" sitting next to "471.21B" reads as two different
+                    // conventions in one band.
                     label: "Subscribers",
-                    value: millions(totals(channels).subscribers),
+                    value: billions(totals(channels).subscribers),
                     note: "combined",
                   },
                   { label: "Total views", value: billions(totals(channels).views) },
@@ -69,7 +72,7 @@ export default function Home() {
               title="All 100 channels"
               intro="Sort by any column. Every chart above is a slice of this table."
             >
-              <div className="card-flat p-5">
+              <div className="card-flat min-w-0 p-5">
                 <ChannelTable channels={channels} />
               </div>
             </Section>

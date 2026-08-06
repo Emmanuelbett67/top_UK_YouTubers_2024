@@ -51,19 +51,19 @@ const HowItWasBuilt: React.FC = () => (
     </div>
 
     <div className="mt-8 grid gap-6 lg:grid-cols-2">
-      <div className="card-flat p-5">
+      <div className="card-flat min-w-0 p-5">
         <h3 className="text-[15px] font-medium tracking-[-0.01em] text-ink">Tools</h3>
         <dl className="mt-4 divide-y divide-border">
           {TOOLS.map((entry) => (
             <div key={entry.tool} className="flex justify-between gap-6 py-2.5">
               <dt className="text-sm text-ink">{entry.tool}</dt>
-              <dd className="text-right text-sm text-ink-muted">{entry.purpose}</dd>
+              <dd className="min-w-0 text-right text-sm text-ink-muted">{entry.purpose}</dd>
             </div>
           ))}
         </dl>
       </div>
 
-      <div className="card-flat p-5">
+      <div className="card-flat min-w-0 p-5">
         <h3 className="text-[15px] font-medium tracking-[-0.01em] text-ink">
           The transform, as a SQL view
         </h3>
@@ -77,7 +77,7 @@ const HowItWasBuilt: React.FC = () => (
       </div>
     </div>
 
-    <div className="mt-6 card-flat p-5">
+    <div className="mt-6 card-flat min-w-0 p-5">
       <h3 className="text-[15px] font-medium tracking-[-0.01em] text-ink">Data quality checks</h3>
       <p className="mt-3 max-w-[68ch] text-sm leading-relaxed text-ink-muted">
         Four checks ran against the view: row count, column count, data types, and duplicates.
@@ -98,7 +98,7 @@ const HowItWasBuilt: React.FC = () => (
       </div>
     </div>
 
-    <div className="mt-6 card-flat p-5">
+    <div className="mt-6 card-flat min-w-0 p-5">
       <h3 className="text-[15px] font-medium tracking-[-0.01em] text-ink">
         A DAX measure, and the table that disagreed with it
       </h3>
@@ -111,7 +111,7 @@ const HowItWasBuilt: React.FC = () => (
       </div>
     </div>
 
-    <figure className="mt-6 card-flat p-5">
+    <figure className="mt-6 card-flat min-w-0 p-5">
       <h3 className="text-[15px] font-medium tracking-[-0.01em] text-ink">
         The original Power BI dashboard
       </h3>
