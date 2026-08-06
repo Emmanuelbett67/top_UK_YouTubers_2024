@@ -202,7 +202,7 @@ src/lib/csv-loader.ts            PapaParse → typed Channel[]; validates row co
 src/lib/metrics.ts               all aggregation: rankBy(), totals(), derived ratios
 src/lib/roi.ts                   the ROI model; takes Channel[] + assumptions, returns ranked RoiRow[]
 src/lib/format.ts                number, percent, currency, compact (M/B) formatting
-src/lib/tooltip.ts               shared D3 tooltip attach/detach
+src/lib/chart.ts                 shared D3 palette + tooltip (same module name as the siblings)
 src/components/charts/           the four primitives
 src/components/panels/           thin wrappers: select data, pass to primitive, render finding
 src/app/page.tsx                 composition only
