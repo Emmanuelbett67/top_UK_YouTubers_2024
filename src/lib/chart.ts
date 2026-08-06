@@ -1,5 +1,12 @@
 import * as d3 from "d3";
 
+/*
+ * The hex values below shadow the CSS custom properties in src/app/globals.css.
+ * D3 writes SVG presentation attributes, which cannot read Tailwind classes, so
+ * the tokens have to exist twice. THEY MUST BE CHANGED TOGETHER — nothing here
+ * fails if they drift, the charts just quietly stop matching the page around them.
+ */
+
 /**
  * Ranked bars are ink-toned throughout: the panel's answer at full strength, the
  * remainder dimmed. Emphasis by weight, not hue — YouTube red is deliberately absent,
