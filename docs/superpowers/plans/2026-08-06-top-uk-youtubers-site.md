@@ -497,6 +497,21 @@ describe("parseChannels", () => {
     const truncated = csv.split("\n").slice(0, 5).join("\n");
     expect(() => parseChannels(truncated)).toThrow(/100 rows/);
   });
+
+  // Both fixtures below must keep 100 data rows, or the row-count guard fires
+  // first and these pass for the wrong reason.
+
+  it("rejects a numeric cell containing non-numeric text", () => {
+    const corrupted = csv.replace("33600000", "N/A");
+    expect(() => parseChannels(corrupted)).toThrow(/total_subscribers/);
+  });
+
+  // The important one: Number(null) is 0, not NaN, so without a guard on the raw
+  // parsed value this returns a legitimate-looking zero rather than failing.
+  it("rejects a blank numeric cell instead of coercing it to 0", () => {
+    const corrupted = csv.replace(",33600000,", ",,");
+    expect(() => parseChannels(corrupted)).toThrow(/total_subscribers/);
+  });
 });
 ```
 
@@ -531,22 +546,42 @@ export function parseChannels(csvText: string): Channel[] {
     skipEmptyLines: true,
   });
 
-  const channels = data
-    .filter((row) => row && typeof row.channel_name === "string")
-    .map((row) => ({
-      channel_name: String(row.channel_name).trim(),
-      total_subscribers: Number(row.total_subscribers),
-      total_views: Number(row.total_views),
-      total_videos: Number(row.total_videos),
-    }));
+  const rows = data.filter((row) => row && typeof row.channel_name === "string");
 
   // A short read — a truncated fetch, a bad deploy — would otherwise render as
   // plausible-looking charts computed over partial data.
-  if (channels.length !== EXPECTED_ROWS) {
-    throw new Error(`Expected ${EXPECTED_ROWS} rows, parsed ${channels.length}`);
+  if (rows.length !== EXPECTED_ROWS) {
+    throw new Error(`Expected ${EXPECTED_ROWS} rows, parsed ${rows.length}`);
   }
 
-  return channels;
+  // Row count alone doesn't guarantee the numeric fields are numbers. This must
+  // run on papaparse's raw dynamicTyping output, before any Number(...) coercion
+  // touches it — coercion is exactly what hides the problem. A text artifact
+  // like "N/A" survives dynamicTyping as a string, and Number("N/A") is NaN,
+  // which a downstream isFinite check would catch anyway. But a blank cell
+  // survives dynamicTyping as null, and Number(null) is 0 — a legitimate-looking
+  // figure a reader would never catch by eye. Number.isFinite, unlike the
+  // coercing global isFinite(), rejects non-number types outright (including
+  // null and strings) as well as NaN and Infinity, so checking it against the
+  // raw value catches both failure modes.
+  const numericFields = ["total_subscribers", "total_views", "total_videos"] as const;
+  for (const row of rows) {
+    for (const field of numericFields) {
+      if (!Number.isFinite(row[field])) {
+        throw new Error(
+          `Expected a finite number for "${field}" on channel "${String(row.channel_name).trim()}", got ${JSON.stringify(row[field])}`
+        );
+      }
+    }
+  }
+
+  // The casts are sound only because of the guard directly above; keep them together.
+  return rows.map((row) => ({
+    channel_name: String(row.channel_name).trim(),
+    total_subscribers: row.total_subscribers as number,
+    total_views: row.total_views as number,
+    total_videos: row.total_videos as number,
+  }));
 }
 
 export const loadChannels = (csvUrl: string): Promise<Channel[]> =>
