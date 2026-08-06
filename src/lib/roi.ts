@@ -37,6 +37,12 @@ export interface RoiRow {
   netProfit: number;
 }
 
+/**
+ * `avgViews` is a lifetime mean — total views divided by total videos over a
+ * channel's whole history — not a forecast of what a new sponsored video would get.
+ * A channel with one old viral hit projects the same inflated figure as one
+ * performing consistently today, and this model cannot tell the two apart.
+ */
 export function roiRanking(
   channels: Channel[],
   assumptions: RoiAssumptions = DEFAULT_ASSUMPTIONS,
